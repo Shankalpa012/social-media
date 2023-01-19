@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"github.com/joho/godotenv"
+	"github.com/shankalpa12/cmd"
+)
 
 func main() {
-	fmt.Print("this is the data")
+	_ = godotenv.Load()
+
+	cmd.Execute()
 }
