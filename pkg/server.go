@@ -13,6 +13,11 @@ type HTTPServer struct {
 	*gin.Engine
 }
 
+type Login struct {
+	NAME  string `json:"name"`
+	EMAIL string `json:"email" `
+}
+
 func NewHTTPServer(env config.Config) HTTPServer {
 	httpRouter := gin.Default()
 
@@ -31,6 +36,23 @@ func NewHTTPServer(env config.Config) HTTPServer {
 		ctx.JSON(http.StatusOK, gin.H{"data": "Practice API Up and Running"})
 	})
 
+	httpRouter.POST("/user", func(ctx *gin.Context) {
+		login := Login{}
+		err := ctx.Bind(&login)
+		if err != nil {
+			ctx.JSON(http.StatusBadGateway, gin.H{"data": err.Error()})
+			return
+		}
+
+		fmt.Println(len(login.NAME))
+
+		if login.NAME == "" || len(login.NAME) > 10 {
+			ctx.JSON(http.StatusBadGateway, gin.H{"Data": " Validation Error"})
+			return
+		}
+		fmt.Println(login.EMAIL)
+		ctx.JSON(http.StatusOK, gin.H{"dataaaaaa": login.EMAIL})
+	})
 	return HTTPServer{httpRouter}
 }
 
